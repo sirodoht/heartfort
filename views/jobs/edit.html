@@ -1,0 +1,52 @@
+{{define "yield"}}
+<div class="row">
+  <div class="col-md-10 col-md-offset-1">
+    <h2>Edit your job</h2>
+    <a href="/jobs/{{.ID}}">
+      View this job
+    </a>
+    <hr>
+  </div>
+  <div class="col-md-12">
+    {{template "editJobForm" .}}
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-10 col-md-offset-1">
+    <h3>Dangerous zone</h3>
+    <hr>
+  </div>
+  <div class="col-md-12">
+    {{template "deleteJobForm" .}}
+  </div>
+</div>
+{{end}}
+
+{{define "editJobForm"}}
+<form action="/jobs/{{.ID}}/update" method="POST"
+  class="form-horizontal">
+  {{csrfField}}
+  <div class="form-group">
+    <label for="name" class="col-md-1 control-label">Name</label>
+    <div class="col-md-10">
+      <input type="text" name="name" class="form-control" id="name"
+        placeholder="What is the name of your job?" value="{{.Name}}">
+    </div>
+    <div class="col-md-1">
+      <button type="submit" class="btn btn-default">Save</button>
+    </div>
+  </div>
+</form>
+{{end}}
+
+{{define "deleteJobForm"}}
+<form action="/jobs/{{.ID}}/delete" method="POST"
+  class="form-horizontal">
+  {{csrfField}}
+  <div class="form-group">
+    <div class="col-md-10 col-md-offset-1">
+      <button type="submit" class="btn btn-danger">Delete</button>
+    </div>
+  </div>
+</form>
+{{end}}

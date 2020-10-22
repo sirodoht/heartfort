@@ -1,0 +1,25 @@
+{{define "yield"}}
+<div class="row">
+  <div class="col-md-6 col-md-offset-3">
+    <div class="panel panel-primary">
+      <div class="panel-heading">
+        <h3 class="panel-title">Create a job</h3>
+      </div>
+      <div class="panel-body">
+        {{template "jobForm"}}
+      </div>
+    </div>
+  </div>
+</div>
+{{end}}
+
+{{define "jobForm"}}
+<form action="/jobs" method="POST">
+  {{csrfField}}
+  <div class="form-group">
+    <label for="name">Title</label>
+    <input type="text" name="name" class="form-control" id="name" placeholder="What is the name of the job?">
+  </div>
+  <button type="submit" class="btn btn-primary">Create</button>
+</form>
+{{end}}

@@ -1,0 +1,23 @@
+{{define "layout"}}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>Heartfort</title>
+        <link href="/assets/bootstrap.min.css" rel="stylesheet">
+        <link href="/assets/styles.css" rel="stylesheet">
+    </head>
+    <body>
+        {{template "navbar" .}}
+
+        <div class="container-fluid">
+        {{if .Alert}}
+            {{template "alert" .Alert}}
+        {{end}}
+        {{template "yield" .Yield}}
+        {{template "footer"}}
+        </div>
+
+    </body>
+</html>
+{{end}}
