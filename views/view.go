@@ -72,8 +72,7 @@ func (v *View) Render(w http.ResponseWriter, r *http.Request, data interface{}) 
 	})
 	err := tpl.ExecuteTemplate(&buf, v.Layout, vd)
 	if err != nil {
-		http.Error(w, "Something went wrong. If the problem "+
-			"persists, please email support@heartfort.com",
+		http.Error(w, "Something went wrong in rendering a template.",
 			http.StatusInternalServerError)
 		return
 	}

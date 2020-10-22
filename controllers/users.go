@@ -111,7 +111,7 @@ func (u *Users) Login(w http.ResponseWriter, r *http.Request) {
 	http.Redirect(w, r, "/jobs", http.StatusFound)
 }
 
-// POST /logout
+// GET /logout
 func (u *Users) Logout(w http.ResponseWriter, r *http.Request) {
 	// First expire the user's cookie
 	cookie := http.Cookie{

@@ -57,7 +57,7 @@ func main() {
 	r.HandleFunc("/login", usersC.Login).Methods("POST")
 	r.Handle("/logout",
 		requireUserMw.ApplyFn(usersC.Logout)).
-		Methods("POST")
+		Methods("GET")
 	r.Handle("/forgot", usersC.ForgotPwView).Methods("GET")
 	r.HandleFunc("/forgot", usersC.InitiateReset).Methods("POST")
 	r.HandleFunc("/reset", usersC.ResetPw).Methods("GET")
