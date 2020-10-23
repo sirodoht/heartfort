@@ -269,6 +269,7 @@ input[type="password"] {
 }
 
 input[type="submit"] {
+    cursor: pointer;
     background: var(--light-grey-color);
     height 32px;
     padding: 8px 16px;
