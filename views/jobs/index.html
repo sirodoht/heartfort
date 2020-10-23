@@ -1,37 +1,28 @@
 {{define "yield"}}
-<div class="row">
-  <div class="col-md-12">
-    <table class="table table-hover">
-      <thead>
+<h1>Jobs</h2>
+<table>
+    <thead>
         <tr>
-          <th>ID</th>
-          <th>Name</th>
-          <th>View</th>
-          <th>Edit</th>
+            <th>ID</th>
+            <th>Name</th>
+            <th>View</th>
+            <th>Edit</th>
         </tr>
-      </thead>
-      <tbody>
+    </thead>
+    <tbody>
         {{range .}}
-          <tr>
+        <tr>
             <th scope="row">{{.ID}}</th>
             <td>{{.Name}}</td>
             <td>
-              <a href="/jobs/{{.ID}}">
-                View
-              </a>
+                <a href="/jobs/{{.ID}}">View</a>
             </td>
             <td>
-              <a href="/jobs/{{.ID}}/edit">
-                Edit
-              </a>
+                <a href="/jobs/{{.ID}}/edit">Edit</a>
             </td>
-          </tr>
+        </tr>
         {{end}}
-      </tbody>
-    </table>
-    <a href="/jobs/new" class="btn btn-primary">
-      New Job
-    </a>
-  </div>
-</div>
+    </tbody>
+</table>
+<a href="/jobs/new">New Job</a>
 {{end}}

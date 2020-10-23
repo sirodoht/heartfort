@@ -184,7 +184,7 @@ template {
     --link-color: #1175e2;
     --ascent-color: #006cdf;
     --dark-grey-color: #757575;
-    --light-grey-color: #eff1f5;
+    --light-grey-color: #f6f6f6;
     --green-color: #26bd60;
     --red-color: #ff0000;
     --purple-color: #cd1ecd;
@@ -204,4 +204,81 @@ a {
 
 a:hover {
     text-decoration: underline;
+}
+
+/* mods */
+.mod-delete {
+    color: var(--red-color);
+}
+
+.mod-space {
+    margin-top: 32px;
+}
+
+/* nav */
+nav {
+    display: flex;
+    justify-content: space-between;
+    width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.nav-left {
+    display: flex;
+}
+
+.nav-right {
+    display: flex;
+}
+
+nav a {
+    padding: 8px 16px;
+    background: var(--light-grey-color);
+}
+
+nav a + a {
+    margin-left: 16px;
+}
+
+/* main */
+main {
+    width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 32px;
+}
+
+table {
+    width: 100%;
+    max-width: 100%;
+    margin-top: 16px;
+    margin-bottom: 16px;
+}
+
+thead {
+    background: var(--light-grey-color);
+}
+
+/* forms */
+input[type="text"],
+input[type="email"],
+input[type="password"] {
+    width: 100%;
+    margin-bottom: 8px;
+}
+
+input[type="submit"] {
+    background: var(--light-grey-color);
+    height 32px;
+    padding: 8px 16px;
+    border: 0;
+}
+
+/* footer */
+footer {
+    width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 64px;
 }
