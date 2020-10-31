@@ -275,11 +275,3 @@ input[type="submit"] {
     padding: 8px 16px;
     border: 0;
 }
-
-/* footer */
-footer {
-    width: 500px;
-    margin-left: auto;
-    margin-right: auto;
-    margin-top: 64px;
-}
