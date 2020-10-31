@@ -10,9 +10,9 @@ type ServicesConfig func(*Services) error
 // WithGorm will open a GORM connection with the provided
 // info and attach it to the Services type if there aren't
 // any errors.
-func WithGorm(dialect, connectionInfo string) ServicesConfig {
+func WithGorm(connectionInfo string) ServicesConfig {
 	return func(s *Services) error {
-		db, err := gorm.Open(dialect, connectionInfo)
+		db, err := gorm.Open("postgres", connectionInfo)
 		if err != nil {
 			return err
 		}
