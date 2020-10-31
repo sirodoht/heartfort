@@ -226,7 +226,7 @@ h1 {
 nav {
     display: flex;
     justify-content: space-between;
-    width: 500px;
+    max-width: 500px;
     margin-left: auto;
     margin-right: auto;
 }
@@ -250,10 +250,14 @@ nav a + a {
 
 /* main */
 main {
-    width: 500px;
+    max-width: 500px;
     margin-left: auto;
     margin-right: auto;
     margin-top: 32px;
+}
+
+.logo {
+    width: 100%;
 }
 
 table {
