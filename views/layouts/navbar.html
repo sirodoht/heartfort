@@ -2,18 +2,11 @@
 <nav>
     <div class="nav-left">
         <a href="/">Home</a>
-        {{if .User}}
         <a href="/jobs">Jobs</a>
         <a href="/assignments">Assignments</a>
-        {{end}}
     </div>
     <div class="nav-right">
-        {{if .User}}
-        <a href="/logout">Log out</a>
-        {{else}}
-        <a href="/login">Log In</a>
-        <a href="/signup">Sign Up</a>
-        {{end}}
+        <a href="/logout">Log Out</a>
       </ul>
     </div>
 </nav>

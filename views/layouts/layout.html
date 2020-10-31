@@ -9,7 +9,9 @@
         <link href="/assets/styles.css" rel="stylesheet">
     </head>
     <body>
-        {{template "navbar" .}}
+        {{if .User}}
+            {{template "navbar" .}}
+        {{end}}
 
         <main>
         {{if .Alert}}
@@ -17,8 +19,6 @@
         {{end}}
 
         {{template "yield" .Yield}}
-
-        {{template "footer"}}
         </main>
 
     </body>
