@@ -27,6 +27,7 @@ func main() {
 		models.WithLogMode(!cfg.IsProd()),
 		models.WithUser(cfg.Pepper, cfg.HMACKey),
 		models.WithJob(),
+		models.WithAssignment(),
 	)
 	if err != nil {
 		panic(err)
@@ -44,6 +45,7 @@ func main() {
 	staticC := controllers.NewStatic()
 	usersC := controllers.NewUsers(services.User, emailer)
 	jobsC := controllers.NewJobs(services.Job, r)
+	assignmentsC := controllers.NewAssignments(services.Assignment, r)
 
 	userMw := middleware.User{
 		UserService: services.User,
@@ -88,6 +90,32 @@ func main() {
 		Methods("POST")
 	r.HandleFunc("/jobs/{id:[0-9]+}/delete",
 		requireUserMw.ApplyFn(jobsC.Delete)).
+		Methods("POST")
+
+	// Assignment routes
+	r.Handle("/assignments",
+		requireUserMw.ApplyFn(assignmentsC.Index)).
+		Methods("GET").
+		Name(controllers.IndexAssignments)
+	r.Handle("/assignments/new",
+		requireUserMw.Apply(assignmentsC.New)).
+		Methods("GET")
+	r.Handle("/assignments",
+		requireUserMw.ApplyFn(assignmentsC.Create)).
+		Methods("POST")
+	r.HandleFunc("/assignments/{id:[0-9]+}",
+		assignmentsC.Show).
+		Methods("GET").
+		Name(controllers.ShowAssignment)
+	r.HandleFunc("/assignments/{id:[0-9]+}/edit",
+		requireUserMw.ApplyFn(assignmentsC.Edit)).
+		Methods("GET").
+		Name(controllers.EditAssignment)
+	r.HandleFunc("/assignments/{id:[0-9]+}/update",
+		requireUserMw.ApplyFn(assignmentsC.Update)).
+		Methods("POST")
+	r.HandleFunc("/assignments/{id:[0-9]+}/delete",
+		requireUserMw.ApplyFn(assignmentsC.Delete)).
 		Methods("POST")
 
 	// Assets

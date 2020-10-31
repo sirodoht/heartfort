@@ -1,0 +1,26 @@
+{{define "yield"}}
+<h1>Assignments</h2>
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>View</th>
+            <th>Edit</th>
+        </tr>
+    </thead>
+    <tbody>
+        {{range .}}
+        <tr>
+            <th scope="row">{{.ID}}</th>
+            <td>
+                <a href="/assignments/{{.ID}}">View</a>
+            </td>
+            <td>
+                <a href="/assignments/{{.ID}}/edit">Edit</a>
+            </td>
+        </tr>
+        {{end}}
+    </tbody>
+</table>
+<a href="/assignments/new">New Assignment</a>
+{{end}}

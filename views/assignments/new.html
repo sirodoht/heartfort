@@ -1,0 +1,13 @@
+{{define "yield"}}
+<h1>Create an assignment</h1>
+<form action="/assignments" method="POST">
+    <label for="job_id">Job ID</label>
+    <input type="text" name="job_id" id="job_id">
+
+    <label for="user_id">User ID</label>
+    <input type="text" name="user_id" id="user_id">
+
+    {{csrfField}}
+    <input type="submit" value="Create">
+</form>
+{{end}}

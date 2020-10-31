@@ -1,0 +1,20 @@
+{{define "yield"}}
+<h1>Edit your job</h1>
+
+<form action="/assignments/{{.ID}}/update" method="POST">
+    <label for="job_id">Job ID</label>
+    <input type="text" name="job_id" id="job_id" value="{{.JobID}}">
+
+    <label for="user_id">User ID</label>
+    <input type="text" name="user_id" id="user_id" value="{{.UserID}}">
+
+    {{csrfField}}
+    <input type="submit" value="Save">
+</form>
+
+<h2>Dangerous zone</h2>
+<form action="/assignments/{{.ID}}/delete" method="POST" onsubmit="return confirm('Confirm delete?');">
+    {{csrfField}}
+    <input type="submit" class="mod-delete" value="Delete">
+</form>
+{{end}}

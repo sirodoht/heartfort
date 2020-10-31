@@ -72,8 +72,7 @@ func (v *View) Render(w http.ResponseWriter, r *http.Request, data interface{}) 
 	})
 	err := tpl.ExecuteTemplate(&buf, v.Layout, vd)
 	if err != nil {
-		http.Error(w, "Something went wrong in rendering a template.",
-			http.StatusInternalServerError)
+		http.Error(w, "Something went wrong in rendering a template.", http.StatusInternalServerError)
 		return
 	}
 	io.Copy(w, &buf)

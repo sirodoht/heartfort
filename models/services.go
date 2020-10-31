@@ -52,6 +52,15 @@ func WithJob() ServicesConfig {
 	}
 }
 
+// WithAssignment will use the existing GORM DB connection of
+// the Services object to build and set a AssignmentService.
+func WithAssignment() ServicesConfig {
+	return func(s *Services) error {
+		s.Assignment = NewAssignmentService(s.db)
+		return nil
+	}
+}
+
 // NewServices now will accept a list of config functions to
 // run. Each function will accept a pointer to the current
 // Services object as its only argument and will edit that
@@ -68,9 +77,10 @@ func NewServices(cfgs ...ServicesConfig) (*Services, error) {
 }
 
 type Services struct {
-	Job  JobService
-	User UserService
-	db   *gorm.DB
+	Assignment AssignmentService
+	Job        JobService
+	User       UserService
+	db         *gorm.DB
 }
 
 // Closes the database connection
@@ -80,12 +90,12 @@ func (s *Services) Close() error {
 
 // AutoMigrate will attempt to automatically migrate all tables
 func (s *Services) AutoMigrate() error {
-	return s.db.AutoMigrate(&User{}, &Job{}, &pwReset{}).Error
+	return s.db.AutoMigrate(&User{}, &Job{}, &Assignment{}, &pwReset{}).Error
 }
 
 // DestructiveReset drops all tables and rebuilds them
 func (s *Services) DestructiveReset() error {
-	err := s.db.DropTableIfExists(&User{}, &Job{}, &pwReset{}).Error
+	err := s.db.DropTableIfExists(&User{}, &Job{}, &Assignment{}, &pwReset{}).Error
 	if err != nil {
 		return err
 	}

@@ -15,8 +15,6 @@ const (
 	IndexJobs = "index_jobs"
 	ShowJob   = "show_job"
 	EditJob   = "edit_job"
-
-	maxMultipartMem = 1 << 20 // 1 megabyte
 )
 
 func NewJobs(js models.JobService, r *mux.Router) *Jobs {
