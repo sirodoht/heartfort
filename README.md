@@ -4,7 +4,7 @@
 
 ```sh
 $ docker-compose up
-$ fresh  # https://github.com/gravityblast/fresh
+$ fresh -c fresh.conf # https://github.com/gravityblast/fresh
 ```
 
 ## Serve
