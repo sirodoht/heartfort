@@ -274,7 +274,8 @@ thead {
 /* forms */
 input[type="text"],
 input[type="email"],
-input[type="password"] {
+input[type="password"],
+input[type="date"] {
     width: 100%;
     margin-bottom: 8px;
 }
@@ -285,4 +286,29 @@ input[type="submit"] {
     height: 32px;
     padding: 8px 16px;
     border: 0;
+}
+
+/* landing */
+.landing-assignments {
+    font-family: monospace;
+}
+
+.landing-assignments table {
+    table-layout: fixed;
+}
+
+.landing-assignments td {
+    width: 50%;
+}
+
+.landing-assignments tr:nth-child(2n+1){
+    background-color: #faead7;
+}
+
+.landing-assignments td {
+    padding: 4px 8px;
+}
+
+.landing-assignments td:nth-child(2) {
+    text-align: right;
 }
