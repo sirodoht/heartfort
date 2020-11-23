@@ -3,10 +3,13 @@
 
 <form action="/assignments/{{.ID}}/update" method="POST">
     <label for="job_id">Job ID</label>
-    <input type="text" name="job_id" id="job_id" value="{{.JobID}}">
+    <input type="text" name="job_id" id="job_id" value="{{.Job.ID}}">
 
     <label for="user_id">User ID</label>
     <input type="text" name="user_id" id="user_id" value="{{.UserID}}">
+
+    <label for="week_start">Week Start</label>
+    <input type="date" name="week_start" id="week_start" value="{{.WeekStart}}">
 
     {{csrfField}}
     <input type="submit" value="Save">

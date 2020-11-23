@@ -39,7 +39,7 @@ func main() {
 	staticC := controllers.NewStatic()
 	usersC := controllers.NewUsers(services.User, emailer)
 	jobsC := controllers.NewJobs(services.Job, r)
-	assignmentsC := controllers.NewAssignments(services.Assignment, r)
+	assignmentsC := controllers.NewAssignments(services.Assignment, services.Job, services.DB, r)
 
 	userMw := middleware.User{
 		UserService: services.User,
@@ -51,9 +51,7 @@ func main() {
 	r.HandleFunc("/signup", usersC.Create).Methods("POST")
 	r.Handle("/login", usersC.LoginView).Methods("GET")
 	r.HandleFunc("/login", usersC.Login).Methods("POST")
-	r.Handle("/logout",
-		requireUserMw.ApplyFn(usersC.Logout)).
-		Methods("GET")
+	r.Handle("/logout", requireUserMw.ApplyFn(usersC.Logout)).Methods("GET")
 	r.Handle("/forgot", usersC.ForgotPwView).Methods("GET")
 	r.HandleFunc("/forgot", usersC.InitiateReset).Methods("POST")
 	r.HandleFunc("/reset", usersC.ResetPw).Methods("GET")
@@ -61,55 +59,41 @@ func main() {
 	r.HandleFunc("/cookies", usersC.Cookies).Methods("GET")
 
 	// Job routes
-	r.Handle("/jobs",
-		requireUserMw.ApplyFn(jobsC.Index)).
+	r.Handle("/jobs", requireUserMw.ApplyFn(jobsC.Index)).
 		Methods("GET").
 		Name(controllers.IndexJobs)
-	r.Handle("/jobs/new",
-		requireUserMw.Apply(jobsC.New)).
+	r.Handle("/jobs/new", requireUserMw.Apply(jobsC.New)).
 		Methods("GET")
-	r.Handle("/jobs",
-		requireUserMw.ApplyFn(jobsC.Create)).
+	r.Handle("/jobs", requireUserMw.ApplyFn(jobsC.Create)).
 		Methods("POST")
-	r.HandleFunc("/jobs/{id:[0-9]+}",
-		jobsC.Show).
+	r.HandleFunc("/jobs/{id:[0-9]+}", jobsC.Show).
 		Methods("GET").
 		Name(controllers.ShowJob)
-	r.HandleFunc("/jobs/{id:[0-9]+}/edit",
-		requireUserMw.ApplyFn(jobsC.Edit)).
+	r.HandleFunc("/jobs/{id:[0-9]+}/edit", requireUserMw.ApplyFn(jobsC.Edit)).
 		Methods("GET").
 		Name(controllers.EditJob)
-	r.HandleFunc("/jobs/{id:[0-9]+}/update",
-		requireUserMw.ApplyFn(jobsC.Update)).
+	r.HandleFunc("/jobs/{id:[0-9]+}/update", requireUserMw.ApplyFn(jobsC.Update)).
 		Methods("POST")
-	r.HandleFunc("/jobs/{id:[0-9]+}/delete",
-		requireUserMw.ApplyFn(jobsC.Delete)).
+	r.HandleFunc("/jobs/{id:[0-9]+}/delete", requireUserMw.ApplyFn(jobsC.Delete)).
 		Methods("POST")
 
 	// Assignment routes
-	r.Handle("/assignments",
-		requireUserMw.ApplyFn(assignmentsC.Index)).
+	r.Handle("/assignments", requireUserMw.ApplyFn(assignmentsC.Index)).
 		Methods("GET").
 		Name(controllers.IndexAssignments)
-	r.Handle("/assignments/new",
-		requireUserMw.Apply(assignmentsC.New)).
+	r.Handle("/assignments/new", requireUserMw.Apply(assignmentsC.New)).
 		Methods("GET")
-	r.Handle("/assignments",
-		requireUserMw.ApplyFn(assignmentsC.Create)).
+	r.Handle("/assignments", requireUserMw.ApplyFn(assignmentsC.Create)).
 		Methods("POST")
-	r.HandleFunc("/assignments/{id:[0-9]+}",
-		assignmentsC.Show).
+	r.HandleFunc("/assignments/{id:[0-9]+}", assignmentsC.Show).
 		Methods("GET").
 		Name(controllers.ShowAssignment)
-	r.HandleFunc("/assignments/{id:[0-9]+}/edit",
-		requireUserMw.ApplyFn(assignmentsC.Edit)).
+	r.HandleFunc("/assignments/{id:[0-9]+}/edit", requireUserMw.ApplyFn(assignmentsC.Edit)).
 		Methods("GET").
 		Name(controllers.EditAssignment)
-	r.HandleFunc("/assignments/{id:[0-9]+}/update",
-		requireUserMw.ApplyFn(assignmentsC.Update)).
+	r.HandleFunc("/assignments/{id:[0-9]+}/update", requireUserMw.ApplyFn(assignmentsC.Update)).
 		Methods("POST")
-	r.HandleFunc("/assignments/{id:[0-9]+}/delete",
-		requireUserMw.ApplyFn(assignmentsC.Delete)).
+	r.HandleFunc("/assignments/{id:[0-9]+}/delete", requireUserMw.ApplyFn(assignmentsC.Delete)).
 		Methods("POST")
 
 	// Assets

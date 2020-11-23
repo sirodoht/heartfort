@@ -16,7 +16,7 @@ func WithGorm(connectionInfo string) ServicesConfig {
 		if err != nil {
 			return err
 		}
-		s.db = db
+		s.DB = db
 		return nil
 	}
 }
@@ -28,7 +28,7 @@ func WithGorm(connectionInfo string) ServicesConfig {
 // WithGorm before this config function.
 func WithLogMode(mode bool) ServicesConfig {
 	return func(s *Services) error {
-		s.db.LogMode(mode)
+		s.DB.LogMode(mode)
 		return nil
 	}
 }
@@ -38,7 +38,7 @@ func WithLogMode(mode bool) ServicesConfig {
 // to build and set a UserService.
 func WithUser(pepper, hmacKey string) ServicesConfig {
 	return func(s *Services) error {
-		s.User = NewUserService(s.db, pepper, hmacKey)
+		s.User = NewUserService(s.DB, pepper, hmacKey)
 		return nil
 	}
 }
@@ -47,7 +47,7 @@ func WithUser(pepper, hmacKey string) ServicesConfig {
 // the Services object to build and set a JobService.
 func WithJob() ServicesConfig {
 	return func(s *Services) error {
-		s.Job = NewJobService(s.db)
+		s.Job = NewJobService(s.DB)
 		return nil
 	}
 }
@@ -56,7 +56,7 @@ func WithJob() ServicesConfig {
 // the Services object to build and set a AssignmentService.
 func WithAssignment() ServicesConfig {
 	return func(s *Services) error {
-		s.Assignment = NewAssignmentService(s.db)
+		s.Assignment = NewAssignmentService(s.DB)
 		return nil
 	}
 }
@@ -80,22 +80,22 @@ type Services struct {
 	Assignment AssignmentService
 	Job        JobService
 	User       UserService
-	db         *gorm.DB
+	DB         *gorm.DB
 }
 
 // Closes the database connection
 func (s *Services) Close() error {
-	return s.db.Close()
+	return s.DB.Close()
 }
 
 // AutoMigrate will attempt to automatically migrate all tables
 func (s *Services) AutoMigrate() error {
-	return s.db.AutoMigrate(&User{}, &Job{}, &Assignment{}, &pwReset{}).Error
+	return s.DB.AutoMigrate(&User{}, &Job{}, &Assignment{}, &pwReset{}).Error
 }
 
 // DestructiveReset drops all tables and rebuilds them
 func (s *Services) DestructiveReset() error {
-	err := s.db.DropTableIfExists(&User{}, &Job{}, &Assignment{}, &pwReset{}).Error
+	err := s.DB.DropTableIfExists(&User{}, &Job{}, &Assignment{}, &pwReset{}).Error
 	if err != nil {
 		return err
 	}

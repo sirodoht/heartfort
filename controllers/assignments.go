@@ -6,6 +6,7 @@ import (
 	"strconv"
 
 	"github.com/gorilla/mux"
+	"github.com/jinzhu/gorm"
 
 	"github.com/sirodoht/heartfort/models"
 	"github.com/sirodoht/heartfort/views"
@@ -17,13 +18,15 @@ const (
 	EditAssignment   = "edit_assignment"
 )
 
-func NewAssignments(as models.AssignmentService, r *mux.Router) *Assignments {
+func NewAssignments(as models.AssignmentService, js models.JobService, db *gorm.DB, r *mux.Router) *Assignments {
 	return &Assignments{
 		New:       views.NewView("layout", "assignments/new"),
 		ShowView:  views.NewView("layout", "assignments/show"),
 		EditView:  views.NewView("layout", "assignments/edit"),
 		IndexView: views.NewView("layout", "assignments/index"),
 		as:        as,
+		js:        js,
+		db:        db,
 		r:         r,
 	}
 }
@@ -34,6 +37,8 @@ type Assignments struct {
 	EditView  *views.View
 	IndexView *views.View
 	as        models.AssignmentService
+	js        models.JobService
+	db        *gorm.DB
 	r         *mux.Router
 }
 
@@ -57,12 +62,29 @@ func (a *Assignments) Index(w http.ResponseWriter, r *http.Request) {
 
 // GET /assignments/:id
 func (a *Assignments) Show(w http.ResponseWriter, r *http.Request) {
-	assignment, err := a.assignmentByID(w, r)
+	vars := mux.Vars(r)
+	idStr := vars["id"]
+	id, err := strconv.Atoi(idStr)
 	if err != nil {
-		return
+		log.Println(err)
+		http.Error(w, "Invalid assignment ID", http.StatusNotFound)
 	}
+
+	type Data struct {
+		AssignmentID string
+		UserID       string
+		Name         string
+	}
+	var result Data
+	a.db.Raw("SELECT a.id AS assignment_id, a.user_id, j.name FROM assignments a JOIN jobs j ON j.id=a.job_id WHERE a.id = ?", uint(id)).Scan(&result)
+
+	// assignment, err := a.assignmentByID(w, r)
+	// if err != nil {
+	// 	return
+	// }
+
 	var vd views.Data
-	vd.Yield = assignment
+	vd.Yield = result
 	a.ShowView.Render(w, r, vd)
 }
 
@@ -92,7 +114,19 @@ func (a *Assignments) Update(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	assignment.UserID = form.UserID
-	assignment.JobID = form.JobID
+
+	// job, err := a.js.ByID(form.JobID)
+	// if err != nil {
+	// 	switch err {
+	// 	case models.ErrNotFound:
+	// 		http.Error(w, "Assignment not found", http.StatusNotFound)
+	// 	default:
+	// 		log.Println(err)
+	// 		http.Error(w, "Something went terribly wrong.", http.StatusInternalServerError)
+	// 	}
+	// }
+	// assignment.Job = *job
+
 	err = a.as.Update(assignment)
 	if err != nil {
 		vd.SetAlert(err)
@@ -114,9 +148,21 @@ func (a *Assignments) Create(w http.ResponseWriter, r *http.Request) {
 		a.New.Render(w, r, vd)
 		return
 	}
+
+	job, err := a.js.ByID(form.JobID)
+	if err != nil {
+		switch err {
+		case models.ErrNotFound:
+			http.Error(w, "Assignment not found", http.StatusNotFound)
+		default:
+			log.Println(err)
+			http.Error(w, "Something went terrible wrong.", http.StatusInternalServerError)
+		}
+	}
+
 	assignment := models.Assignment{
 		UserID: form.UserID,
-		JobID:  form.JobID,
+		Job:    *job,
 	}
 	if err := a.as.Create(&assignment); err != nil {
 		vd.SetAlert(err)
@@ -156,8 +202,7 @@ func (a *Assignments) Delete(w http.ResponseWriter, r *http.Request) {
 	http.Redirect(w, r, url.Path, http.StatusFound)
 }
 
-func (a *Assignments) assignmentByID(w http.ResponseWriter,
-	r *http.Request) (*models.Assignment, error) {
+func (a *Assignments) assignmentByID(w http.ResponseWriter, r *http.Request) (*models.Assignment, error) {
 	vars := mux.Vars(r)
 	idStr := vars["id"]
 	id, err := strconv.Atoi(idStr)
@@ -173,9 +218,23 @@ func (a *Assignments) assignmentByID(w http.ResponseWriter,
 			http.Error(w, "Assignment not found", http.StatusNotFound)
 		default:
 			log.Println(err)
-			http.Error(w, "Something terrible wrong.", http.StatusInternalServerError)
+			http.Error(w, "Something went terribly wrong.", http.StatusInternalServerError)
 		}
 		return nil, err
 	}
+
+	// job, err := a.as.Job(assignment)
+	// if err != nil {
+	// 	switch err {
+	// 	case models.ErrNotFound:
+	// 		http.Error(w, "Job (of assignemtn) not found", http.StatusNotFound)
+	// 	default:
+	// 		log.Println(err)
+	// 		http.Error(w, "Something went terribly wrong.", http.StatusInternalServerError)
+	// 	}
+	// 	return nil, err
+	// }
+	// assignment.Job = *job
+
 	return assignment, nil
 }

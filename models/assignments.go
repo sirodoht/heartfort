@@ -1,18 +1,22 @@
 package models
 
-import "github.com/jinzhu/gorm"
+import (
+	"time"
+
+	"github.com/jinzhu/gorm"
+)
 
 const (
-	ErrJobIDRequired        modelError = "models: job ID is required"
-	ErrAssignmentIDRequired modelError = "models: assignment ID is required"
+	ErrJobIDRequired modelError = "models: job ID is required"
 )
 
 // Assignment represents the assignments table in our DB and is
 // when a user is assigned to a assignment.
 type Assignment struct {
 	gorm.Model
-	UserID uint `gorm:"not_null;index"`
-	JobID  uint `gorm:"not_null"`
+	UserID    uint `gorm:"not_null"`
+	Job       Job  `gorm:"not_null"`
+	WeekStart *time.Time
 }
 
 func NewAssignmentService(db *gorm.DB) AssignmentService {
@@ -41,6 +45,7 @@ type AssignmentDB interface {
 	Create(assignment *Assignment) error
 	Update(assignment *Assignment) error
 	Delete(id uint) error
+	// Job(assignment *Assignment) (*Job, error)
 }
 
 type assignmentValidator struct {
@@ -48,7 +53,7 @@ type assignmentValidator struct {
 }
 
 func (av *assignmentValidator) Create(assignment *Assignment) error {
-	err := runAssignmentValFns(assignment, av.userIDRequired, av.jobIDRequired)
+	err := runAssignmentValFns(assignment, av.userIDRequired, av.jobRequired)
 	if err != nil {
 		return err
 	}
@@ -56,7 +61,7 @@ func (av *assignmentValidator) Create(assignment *Assignment) error {
 }
 
 func (av *assignmentValidator) Update(assignment *Assignment) error {
-	err := runAssignmentValFns(assignment, av.userIDRequired, av.jobIDRequired)
+	err := runAssignmentValFns(assignment, av.userIDRequired, av.jobRequired)
 	if err != nil {
 		return err
 	}
@@ -118,6 +123,12 @@ func (ag *assignmentGorm) Delete(id uint) error {
 	return ag.db.Delete(&assignment).Error
 }
 
+// func (ag *assignmentGorm) Job(assignment *Assignment) (*Job, error) {
+// 	var job Job
+// 	ag.db.Model(&assignment).Association("Jobs").Find(&job)
+// 	return &job, nil
+// }
+
 func (av *assignmentValidator) userIDRequired(a *Assignment) error {
 	if a.UserID <= 0 {
 		return ErrUserIDRequired
@@ -125,8 +136,8 @@ func (av *assignmentValidator) userIDRequired(a *Assignment) error {
 	return nil
 }
 
-func (av *assignmentValidator) jobIDRequired(a *Assignment) error {
-	if a.JobID <= 0 {
+func (av *assignmentValidator) jobRequired(a *Assignment) error {
+	if a.Job == (Job{}) {
 		return ErrJobIDRequired
 	}
 	return nil
