@@ -101,6 +101,7 @@ func main() {
 	// mates routes
 	r.Handle("/notifications", matesC.New).Methods("GET")
 	r.HandleFunc("/mates", matesC.Create).Methods("POST")
+	r.HandleFunc("/mates", requireUserMw.ApplyFn(matesC.Index)).Methods("GET").Name(controllers.IndexMates)
 
 	// Assets
 	assetHandler := http.FileServer(http.Dir("./assets/"))
