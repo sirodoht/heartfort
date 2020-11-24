@@ -1,0 +1,9 @@
+{{define "yield"}}
+<h1 style="text-align: left;">Register for notifications</h1>
+<form action="/mates" method="POST">
+    {{csrfField}}
+    <label for="email">Email</label>
+    <input type="email" name="email" id="email">
+    <input type="submit" value="Submit">
+</form>
+{{end}}

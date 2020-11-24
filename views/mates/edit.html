@@ -1,0 +1,16 @@
+{{define "yield"}}
+<h1>Edit your mate</h1>
+
+<form action="/mates/{{.ID}}/update" method="POST">
+    {{csrfField}}
+    <label for="email">Email</label>
+    <input type="email" name="email" id="email" placeholder="What is the email of your mate?" value="{{.Email}}">
+    <input type="submit" value="Save">
+</form>
+
+<h2>Dangerous zone</h2>
+<form action="/mates/{{.ID}}/delete" method="POST" onsubmit="return confirm('Confirm delete?');">
+    {{csrfField}}
+    <input type="submit" class="mod-delete" value="Delete">
+</form>
+{{end}}
