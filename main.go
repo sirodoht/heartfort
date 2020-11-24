@@ -22,6 +22,7 @@ func main() {
 		models.WithUser(cfg.Pepper, cfg.HMACKey),
 		models.WithJob(),
 		models.WithAssignment(),
+		models.WithMate(),
 	)
 	if err != nil {
 		panic(err)
@@ -40,6 +41,7 @@ func main() {
 	usersC := controllers.NewUsers(services.User, emailer)
 	jobsC := controllers.NewJobs(services.Job, r)
 	assignmentsC := controllers.NewAssignments(services.Assignment, services.Job, services.DB, r)
+	matesC := controllers.NewMates(services.Mate, r)
 
 	userMw := middleware.User{
 		UserService: services.User,
@@ -95,6 +97,10 @@ func main() {
 		Methods("POST")
 	r.HandleFunc("/assignments/{id:[0-9]+}/delete", requireUserMw.ApplyFn(assignmentsC.Delete)).
 		Methods("POST")
+
+	// mates routes
+	r.Handle("/notifications", matesC.New).Methods("GET")
+	r.HandleFunc("/mates", matesC.Create).Methods("POST")
 
 	// Assets
 	assetHandler := http.FileServer(http.Dir("./assets/"))
