@@ -195,6 +195,7 @@ body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Helvetica Neue", Arial, sans-serif;
     font-size: 14px;
     line-height: 1.5;
+    font-family: monospace;
 }
 
 a {
@@ -204,6 +205,10 @@ a {
 
 a:hover {
     text-decoration: underline;
+}
+
+ul {
+    padding-left: 32px;
 }
 
 h1 {
@@ -289,10 +294,6 @@ input[type="submit"] {
 }
 
 /* landing */
-.landing-assignments {
-    font-family: monospace;
-}
-
 .landing-assignments table {
     table-layout: fixed;
 }
@@ -311,4 +312,9 @@ input[type="submit"] {
 
 .landing-assignments td:nth-child(2) {
     text-align: right;
+}
+
+/* specs */
+.specs > li {
+    font-weight: 600;
 }
